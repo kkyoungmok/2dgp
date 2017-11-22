@@ -21,13 +21,10 @@ class Grass:
         self.image.draw(self.x, self.y)
 
 
-    def get_bb(self):
-
-        return self.x  -4000, self.y - 300, self.x + 4000, self.y -230
 
 
-    def draw_bb(self):
-        draw_rectangle(*self.get_bb())
+
+
 
     # fill here
 

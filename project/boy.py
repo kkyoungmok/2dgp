@@ -16,21 +16,22 @@ class Boy:
 
     image = None
 
-    LEFT_JAT,RIGHT_JAT,LEFT_AT,RIGHT_AT,LEFT_JUMP, RIGHT_JUMP, LEFT_RUN,RIGHT_RUN, LEFT_STAND, RIGHT_STAND = 0,1,2,3,4,5,6, 7, 8,9
+    LEFT_JAT,RIGHT_JAT,LEFT_AT,RIGHT_AT,LEFT_JUMP, RIGHT_JUMP, LEFT_RUN,RIGHT_RUN, LEFT_STAND, RIGHT_STAND,LEFT_D, RIGHT_D = 0,1,2,3,4,5,6, 7, 8,9,10,11
 
     def __init__(self):
         self.x, self.y = 150, 100
-        self.frame = random.randint(0, 9)
+        self.frame = random.randint(0, 11)
         self.life_time = 0.0
         self.total_frames = 0.0
         self.dir = 0
         self.hi =0
         self.a_t = 0
         self.bef_jump=0
+        self.y_min = 100
         self.bef_state=self.RIGHT_STAND
         self.state = self.RIGHT_STAND
         if Boy.image == None:
-            Boy.image = load_image('player-1.png')
+            Boy.image = load_image('player-1-1.png')
 
 
     def update(self, frame_time):
@@ -40,15 +41,15 @@ class Boy:
         self.life_time += frame_time
         distance = Boy.RUN_SPEED_PPS * frame_time
         self.total_frames += Boy.FRAMES_PER_ACTION * Boy.ACTION_PER_TIME * frame_time
-        self.frame = int(self.total_frames) % 9
+        self.frame = int(self.total_frames) % 10
         self.x += (self.dir * distance)
         self.y += (self.hi*distance)
 
-        if self.y> (self.bef_jump+158):
+        if self.y> (self.bef_jump+150):
             self.hi = -2
         if self.y < self.bef_jump:
             self.hi=0
-            self.y = self.bef_jump
+            self.y = self.y_min
             if self.state in (self.RIGHT_JUMP, self.LEFT_JUMP):
                 self.state= self.bef_state
 
@@ -57,6 +58,12 @@ class Boy:
         if self.a_t == 0:
             if self.state in ( self.LEFT_JAT,self.RIGHT_JAT,self.LEFT_AT,self.RIGHT_AT):
                 self.state= self.bef_state
+
+        if self.state in (self.RIGHT_D,self.LEFT_D ):
+            self.bef_jump +=0.5
+            if self.bef_jump==100:
+                 self.x,self.y=150,100
+                 self.state=self.RIGHT_STAND
 
 
 
@@ -72,9 +79,9 @@ class Boy:
         if self.a_t==0:
            return self.x - 20, self.y - 30, self.x + 20, self.y + 30
         elif self.state in ( self.LEFT_JAT,self.LEFT_AT):
-           return self.x - 30, self.y - 30, self.x + 20, self.y + 30
+           return self.x - 35, self.y - 30, self.x + 20, self.y + 30
         elif self.state in (self.RIGHT_JAT,self.RIGHT_AT):
-           return self.x - 20, self.y - 30, self.x + 30, self.y + 30
+           return self.x - 20, self.y - 30, self.x + 35, self.y + 30
 
     def handle_event(self, event):
 
