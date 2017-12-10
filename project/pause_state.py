@@ -35,7 +35,7 @@ def draw(frame_time):
         Pause.draw(400,300)
     if (onoff==200):
          onoff=0
-    main_state.boy.draw()
+    main_state.night.draw()
     main_state.grass.draw()
     onoff += 1
     update_canvas()

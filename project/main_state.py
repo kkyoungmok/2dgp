@@ -5,7 +5,7 @@ import title_state
 import pause_state
 import  collision
 
-from boy import Boy # import Boy class from boy.py
+from night import Night # import Boy class from night.py
 from ball import Ball, BigBall
 from grass import Grass
 from brick import Brick
@@ -16,7 +16,7 @@ from  zombie import Zombie
 
 name = "main_state"
 
-boy = None
+night = None
 balls = None
 big_balls = None
 grass = None
@@ -25,19 +25,22 @@ zombie= None
 
 
 def create_world():
-    global boy, grass, balls, big_balls, brick, zombie
-    boy = Boy()
+    global night, grass, balls, big_balls, brick, zombie
+    night = Night()
     brick= Brick()
     big_balls = [BigBall() for i in range(10)]
     balls = [Ball()for i in range(10)]
     balls=big_balls+balls
     grass=Grass()
     zombie=Zombie()
+    grass.set_center_object(night)
+    night.set_background(grass)
+    zombie.set_background(grass)
 
 def destroy_world():
-    global boy, grass, balls, big_balls,brick,zombie
+    global night, grass, balls, big_balls,brick,zombie
 
-    del(boy)
+    del(night)
     del(balls)
     del(grass)
     del(big_balls)
@@ -75,7 +78,7 @@ def handle_events(frame_time):
         elif event.type == SDL_KEYDOWN and event.key == SDLK_p:
             game_framework.push_state(pause_state)
         else:
-            boy.handle_event(event)
+            night.handle_event(event)
 
 
 
@@ -93,19 +96,19 @@ def collide_brick(a, b):
 
 def update(frame_time):
 
-    boy.update(frame_time)
+    night.update(frame_time)
     grass.update(frame_time)
     zombie.update(frame_time)
 
-    if collide_brick(boy,zombie):
-        if boy.state <10 and zombie.state>1:
-           if boy.a_t==0:
-               if boy.state == 9 or boy.state == 7 or boy.state == 5 :
-                   boy.state=11
-                   boy.dir=0
+    if collide_brick(night, zombie):
+        if night.state <10 and zombie.state>1:
+           if night.a_t==0:
+               if night.state == 9 or night.state == 7 or night.state == 5 :
+                   night.state=11
+                   night.dir=0
                else:
-                   boy.state = 10
-                   boy.dir = 0
+                   night.state = 10
+                   night.dir = 0
            elif zombie.state==3:
                zombie.state = 1
                zombie.dir=0
@@ -116,48 +119,7 @@ def update(frame_time):
 
 
 
-    if boy.x >= 350:
-        if grass.x > -3200:
-            boy.x = 350
-            if boy.dir==1:
-                grass.dir = -0.5
-                if zombie.state==0 or zombie.state==1:
-                    zombie.dir = -2.7
-                else:
-                    zombie.dir =-2.2
-#                crush.dir = -0.5
-            if boy.dir != 1:
-                grass.dir = 0
-                if zombie.state==0 or zombie.state==1:
-                    zombie.dir = 0
- #               crush.dir = 0
-    if grass.x < -3200:
-        grass.dir = 0
-        if zombie.state == 0 or zombie.state == 1:
-            zombie.dir = 0
- #       crush.dir = 0
-        grass.x = -3200
- #       crush.x = -3200
-    if grass.x < 4000:
-        if boy.x <= 340:
-            boy.x = 340
-            if boy.dir == -1:
-                grass.dir = 0.5
-                if zombie.state==0 or zombie.state==1:
-                    zombie.dir = 2.7
- #               crush.dir =0.5
-            if boy.dir != -1:
-                grass.dir = 0
-                if zombie.state==0 or zombie.state==1:
-                    zombie.dir = 0
- #               crush.dir = 0
-    if grass.x > 4000:
-        grass.dir = 0
-        if zombie.state == 0 or zombie.state == 1:
-            zombie.dir = 0
-  #      crush.dir = 0
-  #      crush.x = 4000
-        grass.x = 4000
+
 
 
 
@@ -171,7 +133,7 @@ def update(frame_time):
 def draw(frame_time):
     clear_canvas()
     grass.draw()
-    boy.draw()
+    night.draw()
     if zombie.x>1:
        zombie.draw()
        zombie.draw_bb()
@@ -179,7 +141,7 @@ def draw(frame_time):
 #       ball.draw()
 #
 #    grass.draw_bb()
-    boy.draw_bb()
+    night.draw_bb()
   #  for ball in balls:
  #       ball.draw_bb()
 

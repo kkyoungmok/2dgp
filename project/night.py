@@ -3,9 +3,9 @@ import random
 from pico2d import *
 
 
-class Boy:
+class Night:
     PIXEL_PER_METER = (10.0 / 0.3)           # 10 pixel 30 cm
-    RUN_SPEED_KMPH = 20.0                    # Km / Hour
+    RUN_SPEED_KMPH = 30.0                    # Km / Hour
     RUN_SPEED_MPM = (RUN_SPEED_KMPH * 1000.0 / 60.0)
     RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0)
     RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
@@ -20,6 +20,8 @@ class Boy:
 
     def __init__(self):
         self.x, self.y = 150, 100
+        self.canvas_width = get_canvas_width()
+        self.canvas_height = get_canvas_height()
         self.frame = random.randint(0, 11)
         self.life_time = 0.0
         self.total_frames = 0.0
@@ -30,8 +32,11 @@ class Boy:
         self.y_min = 100
         self.bef_state=self.RIGHT_STAND
         self.state = self.RIGHT_STAND
-        if Boy.image == None:
-            Boy.image = load_image('player-1-1.png')
+        if Night.image == None:
+            Night.image = load_image('player-1-1.png')
+
+    def set_background(self, bg):
+        self.bg = bg
 
 
     def update(self, frame_time):
@@ -39,11 +44,13 @@ class Boy:
             return max(minimum, min(x, maximum))
 
         self.life_time += frame_time
-        distance = Boy.RUN_SPEED_PPS * frame_time
-        self.total_frames += Boy.FRAMES_PER_ACTION * Boy.ACTION_PER_TIME * frame_time
+        distance = Night.RUN_SPEED_PPS * frame_time
+        self.total_frames += Night.FRAMES_PER_ACTION * Night.ACTION_PER_TIME * frame_time
         self.frame = int(self.total_frames) % 10
         self.x += (self.dir * distance)
         self.y += (self.hi*distance)
+
+        self.x = clamp(0, self.x, self.bg.w)
 
         if self.y> (self.bef_jump+150):
             self.hi = -2
@@ -65,23 +72,21 @@ class Boy:
                  self.x,self.y=150,100
                  self.state=self.RIGHT_STAND
 
-
-
-
-
-        self.x = clamp(0, self.x, 800)
-
+        self.x = clamp(0, self.x, self.bg.w)
+        self.y = clamp(0, self.y, self.bg.h)
 
     def draw(self):
-        self.image.clip_draw(self.frame * 70, self.state * 70, 70, 70, self.x, self.y)
+
+        self.image.clip_draw(self.frame * 70, self.state * 70, 70, 70, self.x - self.bg.window_left,
+                             self.y - self.bg.window_bottom)
 
     def get_bb(self):
         if self.a_t==0:
-           return self.x - 20, self.y - 30, self.x + 20, self.y + 30
+           return self.x - 20-self.bg.window_left, self.y - 30-self.bg.window_bottom, self.x + 20-self.bg.window_left, self.y + 30-self.bg.window_bottom
         elif self.state in ( self.LEFT_JAT,self.LEFT_AT):
-           return self.x - 35, self.y - 30, self.x + 20, self.y + 30
+           return self.x - 35-self.bg.window_left, self.y - 30-self.bg.window_bottom, self.x + 20-self.bg.window_left, self.y + 30-self.bg.window_bottom
         elif self.state in (self.RIGHT_JAT,self.RIGHT_AT):
-           return self.x - 20, self.y - 30, self.x + 35, self.y + 30
+           return self.x - 20-self.bg.window_left, self.y - 30-self.bg.window_bottom, self.x + 35-self.bg.window_left, self.y + 30-self.bg.window_bottom
 
     def handle_event(self, event):
 
