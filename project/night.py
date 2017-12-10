@@ -29,7 +29,7 @@ class Night:
         self.hi =0
         self.a_t = 0
         self.bef_jump=0
-        self.y_min = 100
+        self.bunji = 0
         self.bef_state=self.RIGHT_STAND
         self.state = self.RIGHT_STAND
         if Night.image == None:
@@ -56,7 +56,7 @@ class Night:
             self.hi = -2
         if self.y < self.bef_jump:
             self.hi=0
-            self.y = self.y_min
+            self.y -=2
             if self.state in (self.RIGHT_JUMP, self.LEFT_JUMP):
                 self.state= self.bef_state
 
@@ -72,8 +72,43 @@ class Night:
                  self.x,self.y=150,100
                  self.state=self.RIGHT_STAND
 
-        self.x = clamp(0, self.x, self.bg.w)
-        self.y = clamp(0, self.y, self.bg.h)
+        self.x = clamp(120, self.x, self.bg.w)
+        if self.bunji==0:
+            self.y = clamp(100, self.y, self.bg.h)
+        else:
+            self.y = clamp(-120, self.y, self.bg.h)
+
+
+        if self.x >300 and self.x<400:
+            self.y = clamp(180, self.y, self.bg.h)
+
+        if self.x >450 and self.x<650 and self.y>240:
+            self.y = clamp(250, self.y, self.bg.h)
+
+        if self.x >700 and self.x<1000:
+            self.y = clamp(180, self.y, self.bg.h)
+
+        if self.x >1700 and self.x<1800:
+            self.y = clamp(180, self.y, self.bg.h)
+
+        if self.x >1800 and self.x<1900 and self.y>240:
+            self.y = clamp(250, self.y, self.bg.h)
+
+        if self.x >1900 and self.x<2000 and self.y>310:
+            self.y = clamp(320, self.y, self.bg.h)
+
+        if self.x > 2500 and self.x < 2600:
+            self.y = clamp(180, self.y, self.bg.h)
+
+        if self.x >2600 and self.x<2800 and self.y>240:
+            self.y = clamp(250, self.y, self.bg.h)
+
+        if self.x >1500 and self.x<1600:
+            self.bunji=1
+        else:
+            self.bunji=0
+
+
 
     def draw(self):
 

@@ -10,6 +10,7 @@ from ball import Ball, BigBall
 from grass import Grass
 from brick import Brick
 from  zombie import Zombie
+from crush import Crush
 
 
 
@@ -22,10 +23,10 @@ big_balls = None
 grass = None
 brick = None
 zombie= None
-
+crush = None
 
 def create_world():
-    global night, grass, balls, big_balls, brick, zombie
+    global night, grass, balls, big_balls, brick, zombie,crush
     night = Night()
     brick= Brick()
     big_balls = [BigBall() for i in range(10)]
@@ -33,9 +34,13 @@ def create_world():
     balls=big_balls+balls
     grass=Grass()
     zombie=Zombie()
+    crush=Crush()
     grass.set_center_object(night)
     night.set_background(grass)
     zombie.set_background(grass)
+    crush.set_background(grass)
+
+
 
 def destroy_world():
     global night, grass, balls, big_balls,brick,zombie
@@ -77,8 +82,11 @@ def handle_events(frame_time):
             game_framework.change_state(title_state)
         elif event.type == SDL_KEYDOWN and event.key == SDLK_p:
             game_framework.push_state(pause_state)
+        elif night.y<-100:
+            game_framework.change_state(title_state)
         else:
             night.handle_event(event)
+
 
 
 
@@ -99,22 +107,33 @@ def update(frame_time):
     night.update(frame_time)
     grass.update(frame_time)
     zombie.update(frame_time)
+    crush.update(frame_time)
 
     if collide_brick(night, zombie):
-        if night.state <10 and zombie.state>1:
-           if night.a_t==0:
-               if night.state == 9 or night.state == 7 or night.state == 5 :
-                   night.state=11
-                   night.dir=0
+        if night.y -20 >zombie.y+20:
+            if zombie.state == 3:
+                zombie.state = 1
+                zombie.dir = 0
+            else:
+                zombie.state = 0
+                zombie.dir = 0
+        else:
+            if night.state <10 and zombie.state>1:
+               if night.a_t==0:
+                   if night.state == 9 or night.state == 7 or night.state == 5 :
+                       night.state=11
+                       night.dir=0
+                   else:
+                       night.state = 10
+                       night.dir = 0
+               elif zombie.state==3:
+                   zombie.state = 1
+                   zombie.dir=0
                else:
-                   night.state = 10
-                   night.dir = 0
-           elif zombie.state==3:
-               zombie.state = 1
-               zombie.dir=0
-           else:
-               zombie.state = 0
-               zombie.dir=0
+                   zombie.state = 0
+                   zombie.dir=0
+
+
 
 
 
@@ -134,6 +153,7 @@ def draw(frame_time):
     clear_canvas()
     grass.draw()
     night.draw()
+    crush.draw()
     if zombie.x>1:
        zombie.draw()
        zombie.draw_bb()
@@ -142,11 +162,12 @@ def draw(frame_time):
 #
 #    grass.draw_bb()
     night.draw_bb()
+    crush.draw_bb()
   #  for ball in balls:
  #       ball.draw_bb()
 
- #   brick.draw()
- #   brick.draw_bb()
+#    brick.draw()
+#   brick.draw_bb()
 
 
     pass

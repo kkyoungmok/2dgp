@@ -5,8 +5,10 @@ from night import Night
 
 
 class Grass:
+
+
     def __init__(self):
-        self.image = load_image('stage_1.png')
+        self.image = load_image('stage_1_2.png')
         self.speed = 0
         self.left = 0
         self.canvas_width = get_canvas_width()

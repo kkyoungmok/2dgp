@@ -20,7 +20,7 @@ class Zombie:
     LEFT_DIE, RIGHT_DIE,LEFT_RUN,RIGHT_RUN= 0,1,2,3
 
     def __init__(self):
-        self.x, self.y = 600, 100
+        self.x, self.y = 650, 100
         self.frame = random.randint(0, 4)
         self.life_time = 0.0
         self.total_frames = 0.0
@@ -44,12 +44,14 @@ class Zombie:
     def handle_left_run(self):
         self.dir = -1
         self.state = self.LEFT_RUN
-
+        if self.distance % 420 > 419:
+            self.dir = 1
+            self.state = self.RIGHT_RUN
 
     def handle_right_run(self):
         self.dir = 1
         self.state = self.RIGHT_RUN
-        if self.distance % 30 > 29:
+        if self.distance % 340 > 339:
             self.dir = -1
             self.state = self.LEFT_RUN
 
