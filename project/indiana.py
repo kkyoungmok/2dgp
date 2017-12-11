@@ -3,7 +3,7 @@ import random
 from pico2d import *
 
 
-class Night:
+class Indiana:
     PIXEL_PER_METER = (10.0 / 0.3)           # 10 pixel 30 cm
     RUN_SPEED_KMPH = 30.0                    # Km / Hour
     RUN_SPEED_MPM = (RUN_SPEED_KMPH * 1000.0 / 60.0)
@@ -30,11 +30,11 @@ class Night:
         self.a_t = 0
         self.bef_jump=0
         self.bunji = 0
-        self.life=280
+        self.life = 1
         self.bef_state=self.RIGHT_STAND
         self.state = self.RIGHT_STAND
-        if Night.image == None:
-            Night.image = load_image('player-1-1.png')
+        if Indiana.image == None:
+            Indiana.image = load_image('INDIANA.png')
 
     def set_background(self, bg):
         self.bg = bg
@@ -45,8 +45,8 @@ class Night:
             return max(minimum, min(x, maximum))
 
         self.life_time += frame_time
-        distance = Night.RUN_SPEED_PPS * frame_time
-        self.total_frames += Night.FRAMES_PER_ACTION * Night.ACTION_PER_TIME * frame_time
+        distance = Indiana.RUN_SPEED_PPS * frame_time
+        self.total_frames += Indiana.FRAMES_PER_ACTION * Indiana.ACTION_PER_TIME * frame_time
         self.frame = int(self.total_frames) % 10
         self.x += (self.dir * distance)
         self.y += (self.hi*distance)
@@ -120,9 +120,9 @@ class Night:
         if self.a_t==0:
            return self.x - 20-self.bg.window_left, self.y - 30-self.bg.window_bottom, self.x + 20-self.bg.window_left, self.y + 30-self.bg.window_bottom
         elif self.state in ( self.LEFT_JAT,self.LEFT_AT):
-           return self.x - 35-self.bg.window_left, self.y - 30-self.bg.window_bottom, self.x + 20-self.bg.window_left, self.y + 30-self.bg.window_bottom
+           return self.x - 200-self.bg.window_left, self.y - 30-self.bg.window_bottom, self.x + 20-self.bg.window_left, self.y + 30-self.bg.window_bottom
         elif self.state in (self.RIGHT_JAT,self.RIGHT_AT):
-           return self.x - 20-self.bg.window_left, self.y - 30-self.bg.window_bottom, self.x + 35-self.bg.window_left, self.y + 30-self.bg.window_bottom
+           return self.x - 20-self.bg.window_left, self.y - 30-self.bg.window_bottom, self.x + 200-self.bg.window_left, self.y + 30-self.bg.window_bottom
 
     def handle_event(self, event):
 

@@ -1,17 +1,16 @@
 import game_framework
 from pico2d import *
 import main_state
-import select_state
 import collision
 
 
-name = "TitleState"
+name = "select_sate"
 image = None
 
 
 def enter():
     global image
-    image = load_image('title.png')
+    image = load_image('select_state.png')
 
 
 def exit():
@@ -28,7 +27,7 @@ def handle_events(frame_time):
             if(event.type, event.key) == (SDL_KEYDOWN, SDLK_ESCAPE):
                 game_framework.quit()
             elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_SPACE):
-                game_framework.change_state(select_state)
+                game_framework.change_state(main_state)
 
 def draw(frame_time):
     clear_canvas()
